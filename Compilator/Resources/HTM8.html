@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parser.cs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        code {
+            font-family: "Courier New", monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Исходный код</h1>
+    <h2>Parser.cs</h2>
+
+    <pre><code>
+using Microsoft.VisualBasic.ApplicationServices;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Windows.Forms;
+
+namespace Compilator_Kursovaya
+{
+
+    public class Parser
+    {
+        private List<Token> tokens;
+        private string input;
+        public List<Error> errors;
+        private int position;
+        private int state;
+
+        private Token CurrentToken => position < tokens.Count ? tokens[position] : tokens[tokens.Count - 1];
+        private void NextToken() => position++;
+
+        public Parser(List<Token> tokens, string input)
+        {
+            this.tokens = tokens;
+            this.input = input;
+
+            //this.tokens = tokens;
+        }
+
+
+        private void HandleError(string message, char first, string str, int startPos, int endPos)
+        {
+            var (line, column) = GetLineAndColumn(startPos);
+            errors.Add(new Error
+            {
+                Start = startPos,
+                End = endPos,
+                Position = $"{startPos}-{endPos}",
+                Line = line.ToString(),
+                Column = column.ToString(),
+                Message = $"{message}: {str}"
+            });
+        }
+
+        private bool tryStop()
+        {
+            if (CurrentToken.code == 12)
+            {
+                
+                state = 13;
+                return true;
+            }
+            if (CurrentToken.code == 11)
+            {
+                
+
+                state = 1;
+                NextToken();
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        private (int line, int column) GetLineAndColumn(int pos)
+        {
+            int line = 1, column = 1;
+            for (int i = 0; i < pos; i++)
+            {
+                if (input[i] == '\n')
+                {
+                    line++;
+                    column = 1;
+                }
+                else
+                {
+                    column++;
+                }
+            }
+            return (line, column);
+        }
+
+
+        public bool Parse()
+        {
+            position = 0;
+            state = 1;
+            errors = new List<Error>();
+
+
+            while (state != 13) // 9 - конечное состояние
+            {
+                switch (state)
+                {
+                    case 1: state1(); break;
+                    case 2: state2(); break;
+                    case 3: state3(); break;
+                    case 4: state4(); break;
+                    case 5: state5(); break;
+                    case 6: state6(); break;
+                    case 7: state7(); break;
+                    case 8: state8(); break;
+                        //case 9: state9(); break;
+                }
+
+            }
+
+            return errors.Count == 0;
+        }
+
+
+
+
+        private void state1()
+        {
+
+            if (tryStop()) {
+
+                return;
+            }
+
+            if(CurrentToken.code == 2)
+            {
+                state = 2;
+                
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось ключевое слово const", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                if (tokens[position+1]?.code != 2)
+                {
+                    position--;
+                }
+                
+                return;
+            }
+
+
+            if (CurrentToken.code == 1)
+            {
+                state = 2;
+            }
+            else if (CurrentToken.code == -1)
+            {
+                state = 2;
+                HandleError("Неизвестная лексема. Ожидалось ключевое слово const", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+            }
+            else
+            {
+                state = 2;
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось ключевое слово const", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+            }
+        }
+
+        private void state2()
+        {
+            NextToken();
+
+            if (tryStop())
+            {
+                position--;
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+
+            if (CurrentToken.code == 2)
+            {
+                state = 3;
+            }
+            else
+            {
+                bool HasIdent = false;
+                bool HasSym = false;
+                bool HasInteger = false;
+                bool HasEqual = false;
+                bool isErr = false;
+                int p = position;
+
+                for(int i = p; i < tokens.Count; i++)
+                {
+                    if(tokens[i].code == 11 || tokens[i].code == 12)
+                    {
+                        break;
+
+                    }
+                    if (tokens[i].code == 2)
+                    {
+                        HasIdent = true;
+                        break;
+                    }
+                }
+                p = position;
+                for (int i = p; i < tokens.Count; i++)
+                {
+                    if (tokens[i].code == 11 || tokens[i].code == 12)
+                    {
+                        break;
+
+                    }
+                    if (tokens[i].code == 5)
+                    {
+                        HasSym = true;
+                        break;
+                    }
+                }
+                p = position;
+                for (int i = p; i < tokens.Count; i++)
+                {
+                    if (tokens[i].code == 11 || tokens[i].code == 12)
+                    {
+                        break;
+
+                    }
+                    if (tokens[i].code == 3)
+                    {
+                        HasInteger = true;
+                        break;
+                    }
+                }
+                p = position;
+                for (int i = p; i < tokens.Count; i++)
+                {
+                    if (tokens[i].code == 11 || tokens[i].code == 12)
+                    {
+                        break;
+
+                    }
+                    if (tokens[i].code == 6)
+                    {
+                        HasEqual = true;
+                        break;
+                    }
+                }
+
+
+                if (HasIdent)
+                {
+                    while(CurrentToken.code != 2)
+                    {
+                        if (CurrentToken.code == -1)
+                        {
+                            
+                            HandleError("Неизвестная лексема. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        else
+                        {
+                            
+                            HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        NextToken();
+                    }
+                    state = 3;
+                    return;
+                    
+                    
+                }
+
+                if (HasSym && !HasIdent)
+                {
+                    
+                    while (CurrentToken.code != 5)
+                    {
+                        if (CurrentToken.code == -1)
+                        {
+                            isErr = true;
+                            HandleError("Неизвестная лексема. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        else
+                        {
+                            isErr = true;
+                            HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        NextToken();
+                    }
+                }
+                if (HasInteger && !HasIdent && !HasSym)
+                {
+
+                    while (CurrentToken.code != 3)
+                    {
+                        if (CurrentToken.code == -1)
+                        {
+                            isErr = true;
+                            HandleError("Неизвестная лексема. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        else
+                        {
+                            isErr = true;
+                            HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        NextToken();
+                    }
+                }
+
+                if (HasEqual && !HasIdent && !HasSym && !HasInteger)
+                {
+
+                    while (CurrentToken.code != 6)
+                    {
+                        if (CurrentToken.code == -1)
+                        {
+                            isErr = true;
+                            HandleError("Неизвестная лексема. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        else
+                        {
+                            isErr = true;
+                            HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        NextToken();
+                    }
+                }
+
+
+
+
+
+
+
+
+                while (CurrentToken.code != 2)
+                {
+                    if (tryStop()) break;
+
+
+
+                    if(CurrentToken.code == 5)
+                    {
+                        state = 3;
+                        if (!isErr) {
+                            HandleError($"Ожидался идентификатор", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+                        
+                        position--;
+                        return;
+                    }
+                    if(CurrentToken.code == 3)
+                    {
+                        state = 4;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался идентификатор", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                            
+                        }
+                        HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 6)
+                    {
+                        state = 5;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался идентификатор", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 7 || CurrentToken.code == 8 || CurrentToken.code == 9)
+                    {
+                        state = 6;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался идентификатор", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 10)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался идентификатор", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось целое число ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался идентификатор", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+                    
+                    NextToken();
+
+                }
+                state = 3;
+            }
+
+
+        }
+
+        private void state3()
+        {
+            NextToken();
+            if (tryStop())
+            {
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ ':' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+
+            if (CurrentToken.code == 5)
+            {
+                state = 4;
+            }
+            else
+            {
+                bool isErr = false;
+                while (CurrentToken.code != 5)
+                {
+                    if (tryStop()) break;
+
+                    if (CurrentToken.code == 3)
+                    {
+                        state = 4;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+
+                        position--;
+                        return;
+                    }
+
+                    if (CurrentToken.code == 6)
+                    {
+                        state = 5;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 7 || CurrentToken.code == 8 || CurrentToken.code == 9)
+                    {
+                        state = 6;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 10)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ ':' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+                        
+                        HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось целое число ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    
+
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидался символ ':' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ ':' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+
+                    NextToken();
+
+                }
+                state = 4;
+            }
+
+        }
+
+        private void state4()
+        {
+            NextToken();
+            if (tryStop())
+            {
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось ключевое слово integer", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+
+            if (CurrentToken.code == 3)
+            {
+                state = 5;
+            }
+            else
+            {
+                bool isErr = false;
+                while (CurrentToken.code != 3)
+                {
+                    if (tryStop()) return;
+
+                    if (CurrentToken.code == 6)
+                    {
+                        state = 5;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+
+                        position--;
+                        return;
+                    }
+
+                    
+
+                    if (CurrentToken.code == 7 || CurrentToken.code == 8 || CurrentToken.code == 9)
+                    {
+                        state = 6;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+
+                        
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == 10)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидалось ключевое слово integer ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+
+                        
+                        HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        HandleError($"Ожидалось целое число ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидалось ключевое слово integer", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось ключевое слово integer ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+
+                    NextToken();
+
+                }
+                state = 5;
+            }
+        }
+
+        private void state5()
+        {
+            NextToken();
+            if (tryStop())
+            {
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ '=' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+
+            if (CurrentToken.code == 6)
+            {
+                state = 6;
+            }
+            else
+            {
+                bool isErr = false;
+                while (CurrentToken.code != 6)
+                {
+                    if (tryStop()) break;
+
+                    if (CurrentToken.code == 7 || CurrentToken.code == 8 || CurrentToken.code == 9)
+                    {
+                        state = 6;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+
+                        position--;
+                        return;
+                    }
+                    
+
+                    if (CurrentToken.code == 10)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидался символ '=' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+
+                        }
+
+
+                        
+                        HandleError($"Ожидалось целое число ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        position--;
+                        return;
+
+                    }
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидался символ '=' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ '=' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+
+                    NextToken();
+
+                }
+                state = 6;
+            }
+        }
+
+        private void state6()
+        {
+            NextToken();
+            if (tryStop())
+            {
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось целое число ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+
+            if(CurrentToken.code == 7 || CurrentToken.code == 8)
+            {
+                NextToken();
+            }
+
+            if(CurrentToken.code == 9)
+            {
+                state = 7;
+            }
+            else
+            {
+                bool isErr = false;
+                while (CurrentToken.code != 9)
+                {
+                    if(CurrentToken.code == 11)
+                    {
+                        HandleError($" Ожидался символ ';' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        state = 1;
+                        return;
+                    }
+                    
+                    if (tryStop()) return;
+
+                    if (CurrentToken.code == 10)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($"Ожидалось целое число ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+
+                        position--;
+                        return;
+                    }
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидалось целое число", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидалось целое число", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+
+                    NextToken();
+
+                }
+                state = 7;
+            }
+
+        }
+
+        private void state7()
+        {
+            NextToken();
+            if (tryStop())
+            {
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ ';' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                return;
+            }
+            if (CurrentToken.code == 10)
+            {
+                state = 8;
+            }
+            else
+            {
+                bool isErr = false;
+                while (CurrentToken.code != 10)
+                {
+                    if (tryStop()) break;
+
+                    if (CurrentToken.code == 12)
+                    {
+                        state = 7;
+                        if (!isErr)
+                        {
+                            HandleError($" Ожидался символ ';' ", ' ', "_", CurrentToken.startPos, CurrentToken.endPos);
+                        }
+
+                        position--;
+                        return;
+                    }
+
+                    if (CurrentToken.code == -1)
+                    {
+                        isErr = true;
+                        HandleError("Неизвестная лексема. Ожидался символ ';' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался символ ';' ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+                    }
+
+
+                    NextToken();
+
+                }
+                state = 8;
+            }
+        }
+
+        private void state8()
+        {
+            while (true)
+            {
+                NextToken();
+                if(tryStop())return;
+                HandleError($"Неожиданная лексема {CurrentToken.token_type}. Ожидался перенос строки ", CurrentToken.token[0], CurrentToken.token, CurrentToken.startPos, CurrentToken.endPos);
+
+
+            }
+        }
+    }
+
+}
+    </code></pre>
+
+</body>
+</html>

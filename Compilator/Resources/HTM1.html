@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Постановка задачи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+        }
+        .example {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Постановка задачи</h1>
+
+    <p><strong>Константы</strong> – это неизменяемые величины, значения которых заданы заранее и не изменяются во время выполнения программы.</p>
+
+    <p>Для описания констант в языке Pascal используется служебное слово <code>const</code>.</p>
+
+    <p>Формат записи: <code>const &lt;имя_константы&gt;:integer=значение;</code></p>
+
+    <div class="example">
+        <p><strong>Пример:</strong></p>
+        <p>Целая десятичная константа – любое десятичное число без десятичной точки со знаком или без него:</p>
+        <p><code>const n:integer=12;</code></p>
+    </div>
+
+    <p>В связи с разработанной автоматной грамматикой <code>G[‹START›]</code> синтаксический анализатор (парсер) целочисленных констант будет считать верными следующие записи констант:</p>
+
+    <ul>
+        <li><code>const n:integer=12;</code></li>
+        <li><code>const x : integer = -10;</code></li>
+        <li><code>const y: integer= +123;</code></li>
+    </ul>
+
+    <p>Справка (руководство пользователя) представлена в <strong>Приложении А</strong>. Информация о программе представлена в <strong>Приложении Б</strong>.</p>
+
+</body>
+</html>

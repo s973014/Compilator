@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация грамматики</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+        }
+        .grammar-rules {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Классификация грамматики</h1>
+
+    <p>Согласно классификации Хомского, грамматика <code>G[‹START›]</code> является автоматной.</p>
+
+    <p>Правила 1-13 относятся к классу праворекурсивных продукций (<code>A → aB | a | ε</code>):</p>
+
+    <div class="grammar-rules">
+        <ul>
+            <li>1. <code>&lt;START&gt; → 'const'&lt;SPACE&gt;</code></li>
+            <li>2. <code>&lt;SPACE&gt; → '_'&lt;IDENTIFIER&gt;</code></li>
+            <li>3. <code>&lt;IDENTIFIER&gt; → StartSymbols&lt;IDREM&gt;</code></li>
+            <li>4. <code>&lt;IDREM&gt; → Name&lt;IDREM&gt;</code></li>
+            <li>5. <code>&lt;IDREM&gt; → ':'&lt;TYPE&gt;</code></li>
+            <li>6. <code>&lt;TYPE&gt; → 'integer'&lt;EQUAL&gt;</code></li>
+            <li>7. <code>&lt;EQUAL&gt; → '='&lt;NUMBER&gt;</code></li>
+            <li>8. <code>&lt;NUMBER&gt; → '+'&lt;UNSIGNEDNUM&gt;</code></li>
+            <li>9. <code>&lt;NUMBER&gt; → '-'&lt;UNSIGNEDNUM&gt;</code></li>
+            <li>10. <code>&lt;NUMBER&gt; → Digit &lt;NUMBERREM&gt;</code></li>
+            <li>11. <code>&lt;UNSIGNEDNUM&gt; → Digit &lt;NUMBERREM&gt;</code></li>
+            <li>12. <code>&lt;NUMBERREM&gt; → Digit &lt;NUMBERREM&gt;</code></li>
+            <li>13. <code>&lt;NUMBERREM&gt; → ';'</code></li>
+        </ul>
+    </div>
+
+    <p>Отметим, что правила должны быть либо только леворекурсивными, либо только праворекурсивными. Комбинация тех и других не допускается.</p>
+
+    <p>Данная грамматика содержит только праворекурсивные правила и, следовательно, является полностью автоматной.</p>
+
+</body>
+</html>

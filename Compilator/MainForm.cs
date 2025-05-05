@@ -13,6 +13,8 @@ using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using static Compilator.POLIZLexer;
+using static Compilator.POLIZParser;
 using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
@@ -1617,6 +1619,18 @@ namespace Compilator
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void POLIZToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var polizer = new POLIZParser(richTextBox1.Text);
+            var messages = polizer.AnalyzeAndBuildPOLIZ();
+
+            dataGridView1.Rows.Clear();
+
+            foreach(var mess in messages) dataGridView1.Rows.Add(mess);
+
+
         }
     }
 }

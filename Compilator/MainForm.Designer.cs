@@ -33,7 +33,7 @@ namespace Compilator
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +60,7 @@ namespace Compilator
             this.LiteratureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.POLIZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.ShowContentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +97,10 @@ namespace Compilator
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.POLIZToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RegToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.citToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cardmirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -119,7 +123,8 @@ namespace Compilator
             this.toolStripMenuItem4,
             this.POLIZToolStripMenuItem,
             this.toolStripMenuItem5,
-            this.SettingsToolStripMenuItem1});
+            this.SettingsToolStripMenuItem1,
+            this.RegToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -319,6 +324,13 @@ namespace Compilator
             this.toolStripMenuItem4.Size = new System.Drawing.Size(67, 32);
             this.toolStripMenuItem4.Text = "Пуск";
             // 
+            // POLIZToolStripMenuItem
+            // 
+            this.POLIZToolStripMenuItem.Name = "POLIZToolStripMenuItem";
+            this.POLIZToolStripMenuItem.Size = new System.Drawing.Size(90, 32);
+            this.POLIZToolStripMenuItem.Text = "ПОЛИЗ";
+            this.POLIZToolStripMenuItem.Click += new System.EventHandler(this.POLIZToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -360,7 +372,7 @@ namespace Compilator
             this.text18,
             this.text20});
             this.TestSizeToolStripMenuItem.Name = "TestSizeToolStripMenuItem";
-            this.TestSizeToolStripMenuItem.Size = new System.Drawing.Size(228, 34);
+            this.TestSizeToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.TestSizeToolStripMenuItem.Text = "Размер текста";
             // 
             // text11
@@ -411,7 +423,7 @@ namespace Compilator
             this.RussanToolStripMenuItem,
             this.EnglishToolStripMenuItem});
             this.LanguageToolStripMenuItem.Name = "LanguageToolStripMenuItem";
-            this.LanguageToolStripMenuItem.Size = new System.Drawing.Size(228, 34);
+            this.LanguageToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.LanguageToolStripMenuItem.Text = "Язык";
             // 
             // RussanToolStripMenuItem
@@ -654,9 +666,9 @@ namespace Compilator
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.Size = new System.Drawing.Size(1603, 185);
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridView1.Size = new System.Drawing.Size(1603, 177);
             this.dataGridView1.TabIndex = 1;
             // 
             // параметрыToolStripMenuItem
@@ -701,12 +713,36 @@ namespace Compilator
             this.toolTip1.ReshowDelay = 500;
             this.toolTip1.ShowAlways = true;
             // 
-            // POLIZToolStripMenuItem
+            // RegToolStripMenuItem
             // 
-            this.POLIZToolStripMenuItem.Name = "POLIZToolStripMenuItem";
-            this.POLIZToolStripMenuItem.Size = new System.Drawing.Size(90, 32);
-            this.POLIZToolStripMenuItem.Text = "ПОЛИЗ";
-            this.POLIZToolStripMenuItem.Click += new System.EventHandler(this.POLIZToolStripMenuItem_Click);
+            this.RegToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.citToolStripMenuItem,
+            this.cardmirToolStripMenuItem,
+            this.dateToolStripMenuItem});
+            this.RegToolStripMenuItem.Name = "RegToolStripMenuItem";
+            this.RegToolStripMenuItem.Size = new System.Drawing.Size(223, 32);
+            this.RegToolStripMenuItem.Text = "Регулярные выражения";
+            // 
+            // citToolStripMenuItem
+            // 
+            this.citToolStripMenuItem.Name = "citToolStripMenuItem";
+            this.citToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.citToolStripMenuItem.Text = "Цитаты";
+            this.citToolStripMenuItem.Click += new System.EventHandler(this.citToolStripMenuItem_Click);
+            // 
+            // cardmirToolStripMenuItem
+            // 
+            this.cardmirToolStripMenuItem.Name = "cardmirToolStripMenuItem";
+            this.cardmirToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.cardmirToolStripMenuItem.Text = "Карта \"Мир\"";
+            this.cardmirToolStripMenuItem.Click += new System.EventHandler(this.cardmirToolStripMenuItem_Click);
+            // 
+            // dateToolStripMenuItem
+            // 
+            this.dateToolStripMenuItem.Name = "dateToolStripMenuItem";
+            this.dateToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.dateToolStripMenuItem.Text = "Дата ";
+            this.dateToolStripMenuItem.Click += new System.EventHandler(this.dateToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -801,5 +837,9 @@ namespace Compilator
         private RichTextBox richTextBox3;
         private DataGridView dataGridView1;
         private ToolStripMenuItem POLIZToolStripMenuItem;
+        private ToolStripMenuItem RegToolStripMenuItem;
+        private ToolStripMenuItem citToolStripMenuItem;
+        private ToolStripMenuItem cardmirToolStripMenuItem;
+        private ToolStripMenuItem dateToolStripMenuItem;
     }
 }

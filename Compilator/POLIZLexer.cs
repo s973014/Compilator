@@ -64,6 +64,10 @@ namespace Compilator
                     {
                         _tokens.Add(ScanNumber());
                     }
+
+
+                    
+
                     else
                     {
                         switch (currentChar)

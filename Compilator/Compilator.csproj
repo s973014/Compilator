@@ -68,6 +68,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RegexSearcher.cs" />
     <Compile Include="Scaner.cs" />
     <Compile Include="Token.cs" />
     <EmbeddedResource Include="MainForm.en.resx">

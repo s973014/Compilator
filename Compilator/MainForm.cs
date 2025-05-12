@@ -18,6 +18,7 @@ using static Compilator.POLIZParser;
 using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Runtime.Remoting.Messaging;
 
 
 namespace Compilator
@@ -39,6 +40,7 @@ namespace Compilator
         private string FileOpened = "Файл успешно открыт.";
         private string ErrorStr = "Ошибка";
         private string FileErrorStr = "Невозможно открыть файл.";
+        private RegexSearcher RegexSearcher = new RegexSearcher();
 
 
         private string lastText = "";
@@ -1631,6 +1633,30 @@ namespace Compilator
             foreach(var mess in messages) dataGridView1.Rows.Add(mess);
 
 
+        }
+
+        private void citToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var quotes = this.RegexSearcher.FindQuotedSentences(richTextBox1.Text);
+
+            dataGridView1.Rows.Clear();
+            foreach (var q in quotes) dataGridView1.Rows.Add(q.Value, q.Position);
+        }
+
+        private void cardmirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var cards = this.RegexSearcher.FindMirCardNumbers(richTextBox1.Text);
+
+            dataGridView1.Rows.Clear();
+            foreach (var c in cards) dataGridView1.Rows.Add(c.Value, c.Position);
+        }
+
+        private void dateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var cards = this.RegexSearcher.FindValidDates(richTextBox1.Text);
+
+            dataGridView1.Rows.Clear();
+            foreach (var c in cards) dataGridView1.Rows.Add(c.Value, c.Position);
         }
     }
 }

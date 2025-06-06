@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Document.cs" />
     <Compile Include="Error.cs" />
+    <Compile Include="Lab8.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

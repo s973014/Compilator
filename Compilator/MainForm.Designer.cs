@@ -33,7 +33,7 @@ namespace Compilator
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +75,10 @@ namespace Compilator
             this.LanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RussanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EnglishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RegToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.citToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cardmirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.InfoButton = new System.Windows.Forms.Button();
             this.AboutButton = new System.Windows.Forms.Button();
@@ -97,10 +101,7 @@ namespace Compilator
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.RegToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.citToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cardmirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lab8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -124,7 +125,8 @@ namespace Compilator
             this.POLIZToolStripMenuItem,
             this.toolStripMenuItem5,
             this.SettingsToolStripMenuItem1,
-            this.RegToolStripMenuItem});
+            this.RegToolStripMenuItem,
+            this.lab8ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -372,7 +374,7 @@ namespace Compilator
             this.text18,
             this.text20});
             this.TestSizeToolStripMenuItem.Name = "TestSizeToolStripMenuItem";
-            this.TestSizeToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.TestSizeToolStripMenuItem.Size = new System.Drawing.Size(228, 34);
             this.TestSizeToolStripMenuItem.Text = "Размер текста";
             // 
             // text11
@@ -423,7 +425,7 @@ namespace Compilator
             this.RussanToolStripMenuItem,
             this.EnglishToolStripMenuItem});
             this.LanguageToolStripMenuItem.Name = "LanguageToolStripMenuItem";
-            this.LanguageToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.LanguageToolStripMenuItem.Size = new System.Drawing.Size(228, 34);
             this.LanguageToolStripMenuItem.Text = "Язык";
             // 
             // RussanToolStripMenuItem
@@ -439,6 +441,37 @@ namespace Compilator
             this.EnglishToolStripMenuItem.Size = new System.Drawing.Size(209, 34);
             this.EnglishToolStripMenuItem.Text = "Английский";
             this.EnglishToolStripMenuItem.Click += new System.EventHandler(this.EnglishToolStripMenuItem_Click);
+            // 
+            // RegToolStripMenuItem
+            // 
+            this.RegToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.citToolStripMenuItem,
+            this.cardmirToolStripMenuItem,
+            this.dateToolStripMenuItem});
+            this.RegToolStripMenuItem.Name = "RegToolStripMenuItem";
+            this.RegToolStripMenuItem.Size = new System.Drawing.Size(223, 32);
+            this.RegToolStripMenuItem.Text = "Регулярные выражения";
+            // 
+            // citToolStripMenuItem
+            // 
+            this.citToolStripMenuItem.Name = "citToolStripMenuItem";
+            this.citToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.citToolStripMenuItem.Text = "Цитаты";
+            this.citToolStripMenuItem.Click += new System.EventHandler(this.citToolStripMenuItem_Click);
+            // 
+            // cardmirToolStripMenuItem
+            // 
+            this.cardmirToolStripMenuItem.Name = "cardmirToolStripMenuItem";
+            this.cardmirToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.cardmirToolStripMenuItem.Text = "Карта \"Мир\"";
+            this.cardmirToolStripMenuItem.Click += new System.EventHandler(this.cardmirToolStripMenuItem_Click);
+            // 
+            // dateToolStripMenuItem
+            // 
+            this.dateToolStripMenuItem.Name = "dateToolStripMenuItem";
+            this.dateToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.dateToolStripMenuItem.Text = "Дата ";
+            this.dateToolStripMenuItem.Click += new System.EventHandler(this.dateToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -666,9 +699,9 @@ namespace Compilator
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView1.Size = new System.Drawing.Size(1603, 177);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.Size = new System.Drawing.Size(1603, 169);
             this.dataGridView1.TabIndex = 1;
             // 
             // параметрыToolStripMenuItem
@@ -713,36 +746,12 @@ namespace Compilator
             this.toolTip1.ReshowDelay = 500;
             this.toolTip1.ShowAlways = true;
             // 
-            // RegToolStripMenuItem
+            // lab8ToolStripMenuItem
             // 
-            this.RegToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.citToolStripMenuItem,
-            this.cardmirToolStripMenuItem,
-            this.dateToolStripMenuItem});
-            this.RegToolStripMenuItem.Name = "RegToolStripMenuItem";
-            this.RegToolStripMenuItem.Size = new System.Drawing.Size(223, 32);
-            this.RegToolStripMenuItem.Text = "Регулярные выражения";
-            // 
-            // citToolStripMenuItem
-            // 
-            this.citToolStripMenuItem.Name = "citToolStripMenuItem";
-            this.citToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.citToolStripMenuItem.Text = "Цитаты";
-            this.citToolStripMenuItem.Click += new System.EventHandler(this.citToolStripMenuItem_Click);
-            // 
-            // cardmirToolStripMenuItem
-            // 
-            this.cardmirToolStripMenuItem.Name = "cardmirToolStripMenuItem";
-            this.cardmirToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.cardmirToolStripMenuItem.Text = "Карта \"Мир\"";
-            this.cardmirToolStripMenuItem.Click += new System.EventHandler(this.cardmirToolStripMenuItem_Click);
-            // 
-            // dateToolStripMenuItem
-            // 
-            this.dateToolStripMenuItem.Name = "dateToolStripMenuItem";
-            this.dateToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.dateToolStripMenuItem.Text = "Дата ";
-            this.dateToolStripMenuItem.Click += new System.EventHandler(this.dateToolStripMenuItem_Click);
+            this.lab8ToolStripMenuItem.Name = "lab8ToolStripMenuItem";
+            this.lab8ToolStripMenuItem.Size = new System.Drawing.Size(78, 32);
+            this.lab8ToolStripMenuItem.Text = "Лаб. 8";
+            this.lab8ToolStripMenuItem.Click += new System.EventHandler(this.lab8ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -841,5 +850,6 @@ namespace Compilator
         private ToolStripMenuItem citToolStripMenuItem;
         private ToolStripMenuItem cardmirToolStripMenuItem;
         private ToolStripMenuItem dateToolStripMenuItem;
+        private ToolStripMenuItem lab8ToolStripMenuItem;
     }
 }

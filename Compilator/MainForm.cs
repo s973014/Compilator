@@ -1658,5 +1658,16 @@ namespace Compilator
             dataGridView1.Rows.Clear();
             foreach (var c in cards) dataGridView1.Rows.Add(c.Value, c.Position);
         }
+
+        private void lab8ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dataGridView1.Rows.Clear();
+            Pars parser = new Pars(richTextBox1.Text);
+            parser.Parse();
+            if(parser.Errors.Count != 0)
+            {
+                foreach (var err in parser.Errors) dataGridView1.Rows.Add(err.Position,"","", err.Message);
+            }
+        }
     }
 }
